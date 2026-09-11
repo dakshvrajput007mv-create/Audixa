@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audixa — AI Audio Transcript & Chapter Maker</title>
+  <meta name="description" content="AI-powered audio transcription and automated chapter maker supporting English and Hindi/Hinglish speech.">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <a href="/" class="logo-group">
+        <span class="logo-icon">🎙️</span>
+        <span class="logo-text">Audixa</span>
+      </a>
+      
+      <div class="header-meta">
+        <span class="badge badge-primary">Speech to Text</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <section class="upload-hero">
+        <h1>Speech to Synchronized Transcript & Chapters</h1>
+        <p>Upload an audio or video file to generate transcripts and time-stamped chapters.</p>
+      </section>
+
+      <!-- Upload Card -->
+      <div class="upload-card-wrapper card-panel">
+        
+        <form id="upload-form">
+          
+          <!-- Dropzone -->
+          <div id="dropzone" class="dropzone">
+            <input type="file" id="file-input" name="file" accept=".mp3,.wav,.m4a,.mp4,.ogg,.flac,.aac,.webm" style="display: none;">
+            <div class="dropzone-icon">📁</div>
+            <h3>Click or Drag & Drop audio/video file here</h3>
+            <p>Supports MP3, WAV, M4A, MP4, FLAC, AAC, OGG</p>
+            <div class="format-pills">
+              <span class="format-pill">MP3</span>
+              <span class="format-pill">WAV</span>
+              <span class="format-pill">M4A</span>
+              <span class="format-pill">MP4</span>
+              <span class="format-pill">FLAC</span>
+            </div>
+          </div>
+
+          <!-- Selected File Preview -->
+          <div id="file-preview" class="file-preview" style="display: none;">
+            <div class="file-preview-left">
+              <span style="font-size: 20px;">🎵</span>
+              <div>
+                <div id="file-name" class="file-name">filename.mp3</div>
+                <div id="file-size" class="file-size">0.0 MB</div>
+              </div>
+            </div>
+            <button type="button" id="remove-file-btn" class="btn btn-secondary btn-sm">Change File</button>
+          </div>
+
+          <!-- Language Selection -->
+          <div style="margin: 20px 0;">
+            <label for="language-select" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">
+              Select Speech Language
+            </label>
+            <div class="select-wrapper">
+              <select id="language-select" name="language_mode" class="custom-dropdown">
+                <option value="auto" selected>Auto-detect (Hinglish / Mixed)</option>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+              </select>
+              <span class="select-arrow">▼</span>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;">
+            Upload & Transcribe Audio
+          </button>
+
+        </form>
+
+        <!-- Progress Box -->
+        <div id="upload-progress-box" class="progress-container" style="display: none;">
+          <div class="progress-header">
+            <span id="upload-status-label">Uploading file...</span>
+            <span id="upload-percentage" style="font-family: var(--font-mono); color: var(--primary);">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- Processing State -->
+        <div id="transcribing-box" class="transcribing-overlay" style="display: none;">
+          <div style="font-size: 32px; margin-bottom: 8px;">⚙️</div>
+          <div id="processing-status-text" class="status-text">Transcribing with Whisper AI...</div>
+          <div id="processing-subtext" class="status-subtext">Generating synchronized segments and detecting chapters. Please wait...</div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </div>
+
+  <script src="/static/js/upload.js"></script>
+</body>
+</html>
