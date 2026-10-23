@@ -1,10 +1,9 @@
 import os
-from faster_whisper import WhisperModel
 import models
 from sqlalchemy.orm import Session
 from database import SessionLocal
 
-MODEL_SIZE = os.environ.get("WHISPER_MODEL_SIZE", "small") # small is required for accurate Hindi/Marathi, base hallucinates on songs
+MODEL_SIZE = os.environ.get("WHISPER_MODEL_SIZE", "small")
 
 def transcribe_and_generate_chapters(transcript_id: int, file_path: str, language: str = None):
     db = SessionLocal()
@@ -17,10 +16,18 @@ def transcribe_and_generate_chapters(transcript_id: int, file_path: str, languag
         transcript.status = "processing"
         db.commit()
 
+        # Dynamic import to keep serverless function bundle lightweight
+        try:
+            from faster_whisper import WhisperModel
+        except ImportError:
+            WhisperModel = None
+
+        if WhisperModel is None:
+            raise RuntimeError("faster-whisper is not installed in the serverless environment.")
+
         # 1. Transcribe with faster-whisper
         actual_model_size = f"{MODEL_SIZE}.en" if language == "en" else MODEL_SIZE
-        import os as _os
-        cpu_threads = _os.cpu_count() or 4
+        cpu_threads = os.cpu_count() or 4
         model = WhisperModel(actual_model_size, device="cpu", compute_type="int8", cpu_threads=cpu_threads)
         
         # Handle Hinglish explicitly

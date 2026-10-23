@@ -1,0 +1,7 @@
+*.pdf
+PROJECT_*
+build_clean_zip.py
+generate_*.py
+test_app.py
+*.zip
+*.db
