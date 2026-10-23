@@ -1,13 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-import { FileAudio, UploadCloud, Loader2, Music, XCircle, FileVideo, AlertCircle } from 'lucide-react';
+import { FileAudio, UploadCloud, Music, XCircle, FileVideo, AlertCircle } from 'lucide-react';
 
 export default function Home() {
   const [dragActive, setDragActive] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
-  const [isUploading, setIsUploading] = useState(false);
+  const [, setIsUploading] = useState(false);
   
   const [transcriptId, setTranscriptId] = useState<number | null>(null);
   const [processingStatus, setProcessingStatus] = useState<'pending' | 'processing' | 'ready' | 'failed' | null>(null);

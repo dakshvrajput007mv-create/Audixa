@@ -208,12 +208,6 @@ export default function ChapterMaker({ transcriptId, initialChapters, segments, 
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = Math.floor(seconds % 60);
-    return `${m}:${s.toString().padStart(2, '0')}`;
-  };
-
   return (
     <div className="flex flex-col h-full bg-white border-r border-zinc-200">
       <div className="p-4 border-b border-zinc-200 flex justify-between items-center bg-zinc-50">
