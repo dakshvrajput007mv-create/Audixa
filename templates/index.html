@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Audixa — AI Audio Transcript & Chapter Maker</title>
+  <meta name="description" content="AI-powered audio transcription and automated chapter maker supporting English and Hindi/Hinglish speech.">
+  <link rel="stylesheet" href="/static/css/styles.css?v=upload_tabs_v4">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- Header -->
+    <header class="app-header">
+      <a href="/" class="logo-group">
+        <span class="logo-icon">🎙️</span>
+        <span class="logo-text">Audixa</span>
+      </a>
+      
+      <div class="header-meta">
+        <span class="badge badge-primary">Speech to Text</span>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <section class="upload-hero">
+        <h1>Speech to Synchronized Transcript & Chapters</h1>
+        <p>Upload an audio or video file to generate transcripts and time-stamped chapters.</p>
+      </section>
+
+      <!-- Upload Card -->
+      <div class="upload-card-wrapper card-panel">
+        
+        <form id="upload-form">
+
+          <!-- Segmented Upload Mode Bar -->
+          <div class="upload-mode-bar-wrapper">
+            <div class="upload-mode-bar">
+              <button type="button" class="upload-mode-tab active" data-mode="file">
+                <svg class="mode-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <polyline points="14 2 14 8 20 8"></polyline>
+                  <line x1="16" y1="13" x2="8" y2="13"></line>
+                  <line x1="16" y1="17" x2="8" y2="17"></line>
+                </svg>
+                <span>File upload</span>
+              </button>
+              <button type="button" class="upload-mode-tab" data-mode="link">
+                <svg class="mode-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0 7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+                <span>Paste link</span>
+              </button>
+              <button type="button" class="upload-mode-tab" data-mode="record">
+                <svg class="mode-icon-svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path>
+                  <path d="M19 10v2a7 7 0 0 1-14 0v-2"></path>
+                  <line x1="12" y1="19" x2="12" y2="23"></line>
+                  <line x1="8" y1="23" x2="16" y2="23"></line>
+                </svg>
+                <span>Record audio</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Mode 1: File Upload Pane -->
+          <div id="pane-file" class="upload-mode-pane active">
+            <!-- Dropzone -->
+            <div id="dropzone" class="dropzone">
+              <input type="file" id="file-input" name="file" accept=".mp3,.wav,.m4a,.mp4,.ogg,.flac,.aac,.webm" style="display: none;">
+              <div class="dropzone-icon">📁</div>
+              <h3>Click or Drag & Drop audio/video file here</h3>
+              <p>Supports MP3, WAV, M4A, MP4, FLAC, AAC, OGG</p>
+              <div class="format-pills">
+                <span class="format-pill">MP3</span>
+                <span class="format-pill">WAV</span>
+                <span class="format-pill">M4A</span>
+                <span class="format-pill">MP4</span>
+                <span class="format-pill">FLAC</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mode 2: Paste Link Pane -->
+          <div id="pane-link" class="upload-mode-pane" style="display: none;">
+            <div class="link-input-box">
+              <div class="link-field-row">
+                <span class="link-icon-badge">🔗</span>
+                <input type="url" id="link-url-input" name="link_url" placeholder="Paste YouTube link or direct audio/video URL (e.g. https://...)" class="link-input-field">
+                <button type="button" id="clear-link-btn" class="clear-input-btn" style="display: none;" title="Clear link">✕</button>
+              </div>
+              <p class="link-helper-text">Supports YouTube videos, SoundCloud, Vimeo, and direct media URLs (.mp3, .wav, .m4a, .mp4)</p>
+            </div>
+          </div>
+
+          <!-- Mode 3: Record Audio Pane -->
+          <div id="pane-record" class="upload-mode-pane" style="display: none;">
+            <div class="recorder-card">
+              <div class="recorder-visual-wrap">
+                <div id="record-pulsing-ring" class="record-ring">
+                  <span style="font-size: 28px;">🎙️</span>
+                </div>
+              </div>
+              <div id="record-time-counter" class="record-counter">00:00</div>
+              <div id="record-state-label" class="record-label">Click "Start Recording" to capture your microphone audio</div>
+              
+              <div class="record-controls-row">
+                <button type="button" id="record-toggle-btn" class="btn btn-primary btn-sm" style="padding: 10px 22px; font-size: 0.95rem;">
+                  🎙️ Start Recording
+                </button>
+                <button type="button" id="record-stop-btn" class="btn btn-secondary btn-sm" style="display: none; padding: 10px 18px; font-size: 0.95rem;">
+                  ⏹️ Done Recording
+                </button>
+              </div>
+
+              <!-- Preview Audio Player for Recorded Sound -->
+              <div id="recorded-preview-wrap" style="display: none; margin-top: 14px; width: 100%;">
+                <audio id="recorded-audio-player" controls style="width: 100%; height: 38px; border-radius: 6px;"></audio>
+              </div>
+            </div>
+          </div>
+
+          <!-- Selected File Preview -->
+          <div id="file-preview" class="file-preview" style="display: none;">
+            <div class="file-preview-left">
+              <span id="preview-icon" style="font-size: 20px;">🎵</span>
+              <div>
+                <div id="file-name" class="file-name">filename.mp3</div>
+                <div id="file-size" class="file-size">0.0 MB</div>
+              </div>
+            </div>
+            <button type="button" id="remove-file-btn" class="btn btn-secondary btn-sm">Clear</button>
+          </div>
+
+          <!-- Language Selection -->
+          <div style="margin: 20px 0;">
+            <label for="language-select" style="display: block; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase;">
+              Select Speech Language
+            </label>
+            <div class="select-wrapper">
+              <select id="language-select" name="language_mode" class="custom-dropdown">
+                <optgroup label="🌟 Automatic & Mixed">
+                  <option value="auto" selected>Auto-detect (Multilingual / Hinglish)</option>
+                </optgroup>
+                <optgroup label="🇮🇳 Indian Regional Languages">
+                  <option value="hi">Hindi (हिन्दी)</option>
+                  <option value="bn">Bengali (বাংলা)</option>
+                  <option value="mr">Marathi (मराठी)</option>
+                  <option value="te">Telugu (తెలుగు)</option>
+                  <option value="ta">Tamil (தமிழ்)</option>
+                  <option value="gu">Gujarati (ગુજરાતી)</option>
+                  <option value="ur">Urdu (اردو)</option>
+                  <option value="kn">Kannada (ಕನ್ನಡ)</option>
+                  <option value="ml">Malayalam (മലയാളം)</option>
+                  <option value="pa">Punjabi (ਪੰਜਾਬੀ)</option>
+                </optgroup>
+                <optgroup label="🌐 Global Languages">
+                  <option value="en">English</option>
+                  <option value="es">Spanish (Español)</option>
+                  <option value="fr">French (Français)</option>
+                  <option value="de">German (Deutsch)</option>
+                  <option value="ja">Japanese (日本語)</option>
+                  <option value="zh">Chinese (Mandarin)</option>
+                  <option value="ru">Russian (Русский)</option>
+                  <option value="pt">Portuguese (Português)</option>
+                  <option value="it">Italian (Italiano)</option>
+                  <option value="ar">Arabic (العربية)</option>
+                  <option value="ko">Korean (한국어)</option>
+                  <option value="nl">Dutch (Nederlands)</option>
+                  <option value="tr">Turkish (Türkçe)</option>
+                  <option value="vi">Vietnamese (Tiếng Việt)</option>
+                </optgroup>
+              </select>
+              <span class="select-arrow">▼</span>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" id="submit-btn" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 1rem;">
+            Upload & Transcribe Audio
+          </button>
+
+        </form>
+
+        <!-- Progress Box -->
+        <div id="upload-progress-box" class="progress-container" style="display: none;">
+          <div class="progress-header">
+            <span id="upload-status-label">Uploading file...</span>
+            <span id="upload-percentage" style="font-family: var(--font-mono); color: var(--primary);">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-bar-fill" class="progress-bar-fill"></div>
+          </div>
+        </div>
+
+        <!-- Processing State -->
+        <div id="transcribing-box" class="transcribing-overlay" style="display: none;">
+          <div style="font-size: 32px; margin-bottom: 8px;">⚙️</div>
+          <div id="processing-status-text" class="status-text">Transcribing with Whisper AI...</div>
+          <div id="processing-subtext" class="status-subtext">Generating synchronized segments and detecting chapters. Please wait...</div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- Notifications Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+  </div>
+
+  <script src="/static/js/upload.js?v=upload_tabs_v3"></script>
+</body>
+</html>

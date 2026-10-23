@@ -1,0 +1,8 @@
+fastapi[standard]
+sqlalchemy
+alembic
+faster-whisper
+pyjwt
+passlib[bcrypt]
+fpdf2
+python-multipart
