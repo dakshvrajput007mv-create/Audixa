@@ -5,7 +5,1230 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Audixa — Audio, Transcript & Chapter Editor</title>
   <meta name="description" content="Simultaneous multi-panel editor for synchronized audio playback, transcript editing, and chapter generation.">
-  <link rel="stylesheet" href="/static/css/styles.css?v=chapters_revamp_v2">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="/static/css/styles.css">
+  <style id="audixa-inline-design-system">
+/* 
+  Audixa - Radiant Purple & Orchid Blossom Design System
+  Palette extracted from user swatch:
+    - Band 1 (Deep Royal Purple):    #8F18A3
+    - Band 2 (Vibrant Magenta/Orchid): #C753C4
+    - Band 3 (Soft Lilac):            #EE97D8
+    - Band 4 (Pastel Blossom Pink):   #FFC1DF
+*/
+
+:root {
+  /* Direct Palette Swatches */
+  --palette-purple: #8F18A3;
+  --palette-magenta: #C753C4;
+  --palette-lilac: #EE97D8;
+  --palette-pink: #FFC1DF;
+
+  /* Surface & Background Colors */
+  --bg-main: #FDF7FB;
+  --bg-card: #FFFFFF;
+  --bg-card-hover: #FAF0F7;
+  --bg-input: #FCF6FB;
+  --border-color: #ECCDE4;
+  --border-focus: #8F18A3;
+
+  /* Accent & Brand Colors */
+  --primary: #8F18A3;
+  --primary-hover: #751286;
+  --primary-text: #FFFFFF;
+  --accent-purple: #8F18A3;
+  --accent-magenta: #C753C4;
+  --accent-lilac: #EE97D8;
+  --accent-pink: #FFC1DF;
+  --accent-sage: #C753C4;
+  --accent-cream: #FFC1DF;
+  
+  /* Text & Typography */
+  --text-main: #2B0733;
+  --text-muted: #6A3373;
+  --text-dim: #9965A2;
+
+  /* State & Status Colors */
+  --success: #2E7D32;
+  --success-bg: #E8F5E9;
+  --danger: #C62828;
+  --danger-bg: #FFEBEE;
+  --active-highlight: #FCEAF6;
+  --active-border: #8F18A3;
+
+  /* Typography & Sizing */
+  --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --radius: 8px;
+  --shadow-sm: 0 1px 3px rgba(43, 7, 51, 0.06), 0 1px 2px rgba(43, 7, 51, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(43, 7, 51, 0.08), 0 2px 4px -1px rgba(43, 7, 51, 0.04);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-main);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+/* App Container */
+.app-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Standard Solid Card */
+.card-panel {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Top Header */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 14px 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.logo-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.logo-icon {
+  font-size: 24px;
+}
+
+.logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background-color: #FAF0F7;
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+.badge-primary {
+  background-color: var(--palette-pink);
+  color: #630D72;
+  border: 1px solid var(--palette-lilac);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: var(--primary-text);
+  box-shadow: 0 1px 3px rgba(143, 24, 163, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--bg-input);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.btn-secondary:hover {
+  background-color: var(--accent-cream);
+  border-color: var(--border-focus);
+}
+
+.btn-sm {
+  padding: 5px 10px;
+  font-size: 0.82rem;
+}
+
+.btn-icon {
+  padding: 8px;
+  min-width: 36px;
+}
+
+/* ============================================================
+   PAGE 1: UPLOAD SCREEN
+   ============================================================ */
+.upload-hero {
+  text-align: center;
+  margin: 30px 0 24px;
+}
+
+.upload-hero h1 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-main);
+}
+
+.upload-hero p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.upload-card-wrapper {
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   UPLOAD MODE TABS (File upload, Paste link, Record audio)
+   ============================================================ */
+.upload-mode-bar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.upload-mode-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  padding: 4px;
+}
+
+.upload-mode-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  padding: 10px 22px;
+  border-radius: 9999px;
+  font-family: var(--font-main);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #492650;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.upload-mode-tab .mode-icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  stroke: #6E4975;
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.upload-mode-tab:hover {
+  color: var(--primary);
+  background-color: rgba(238, 151, 216, 0.16);
+}
+
+.upload-mode-tab:hover .mode-icon-svg {
+  stroke: var(--primary);
+  transform: scale(1.05);
+}
+
+.upload-mode-tab.active {
+  background-color: #F8EDFA;
+  color: var(--primary);
+  font-weight: 700;
+  border-color: rgba(199, 83, 196, 0.25);
+  box-shadow: 0 2px 8px rgba(143, 24, 163, 0.08);
+}
+
+.upload-mode-tab.active .mode-icon-svg {
+  stroke: var(--primary);
+}
+
+/* Link Pane */
+.link-input-box {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.link-field-row {
+  display: flex;
+  align-items: center;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 6px 12px;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.link-field-row:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(143, 24, 163, 0.15);
+}
+
+.link-icon-badge {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.link-input-field {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  padding: 6px 0;
+}
+
+.link-input-field::placeholder {
+  color: var(--text-dim);
+}
+
+.clear-input-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.clear-input-btn:hover {
+  color: var(--danger);
+}
+
+.link-helper-text {
+  font-size: 0.80rem;
+  color: var(--text-muted);
+  margin-top: 14px;
+}
+
+/* Record Audio Pane */
+.recorder-card {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.record-ring {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: #FAF0F7;
+  border: 2px solid var(--palette-lilac);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.record-ring.recording {
+  background: #FFEBEE;
+  border-color: #E53935;
+  animation: pulse-ring 1.4s infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 57, 53, 0.4); }
+  70% { transform: scale(1.06); box-shadow: 0 0 0 12px rgba(229, 57, 53, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(229, 57, 53, 0); }
+}
+
+.record-counter {
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 1px;
+}
+
+.record-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.record-controls-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Dropzone */
+.dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius);
+  padding: 40px 20px;
+  text-align: center;
+  background-color: var(--bg-input);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropzone:hover, .dropzone.dragover {
+  border-color: var(--primary);
+  background-color: #FAF0F7;
+}
+
+.dropzone-icon {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.dropzone h3 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+  color: var(--text-main);
+}
+
+.dropzone p {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-bottom: 16px;
+}
+
+.format-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.format-pill {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+/* File Selected Preview */
+.file-preview {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+}
+
+.file-preview-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.file-name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.file-size {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Custom Dropdown */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.custom-dropdown {
+  width: 100%;
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+}
+
+.custom-dropdown:focus {
+  border-color: var(--border-focus);
+}
+
+.select-arrow {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+/* Progress & Loading */
+.progress-container {
+  margin-top: 20px;
+  padding: 16px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.85rem;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+}
+
+.progress-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #F6D7ED;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #C753C4, #8F18A3);
+  transition: width 0.2s ease;
+}
+
+.transcribing-overlay {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.status-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 14px;
+  color: var(--text-main);
+}
+
+.status-subtext {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+/* ============================================================
+   PAGE 2: 3-PANEL EDITOR LAYOUT
+   ============================================================ */
+.editor-layout {
+  display: grid;
+  grid-template-columns: 480px 1fr;
+  gap: 20px;
+  height: calc(100vh - 130px);
+  min-height: 600px;
+}
+
+@media (max-width: 1024px) {
+  .editor-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+.editor-left-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Section A: Audio Player */
+.player-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.player-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.waveform-box {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 10px;
+}
+
+#waveform {
+  width: 100%;
+  height: 64px;
+}
+
+.time-display-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.playback-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-play-pause {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: var(--primary-text);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(143, 24, 163, 0.35);
+  transition: background-color 0.15s ease;
+}
+
+.btn-play-pause:hover {
+  background-color: var(--primary-hover);
+}
+
+.speed-selector {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  outline: none;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.volume-slider {
+  width: 70px;
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* Section C: Chapters Panel */
+.chapters-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: var(--shadow-sm);
+}
+
+.panel-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-main);
+}
+
+.chapters-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 4px 6px 4px 2px;
+}
+
+/* Individual Chapter Card Row */
+.chapter-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(43, 7, 51, 0.04);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.chapter-card:hover {
+  background-color: #FAF0F7;
+  border-color: var(--palette-magenta);
+  box-shadow: 0 3px 8px rgba(143, 24, 163, 0.08);
+}
+
+.chapter-card.active {
+  background-color: #FCEAF6;
+  border-color: var(--palette-purple);
+  box-shadow: 0 0 0 2px rgba(143, 24, 163, 0.25);
+}
+
+/* Chapter Number Pill / Index */
+.chapter-idx-badge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  font-family: var(--font-mono);
+  color: var(--palette-purple);
+  background-color: var(--palette-pink);
+  border: 1px solid var(--palette-lilac);
+  border-radius: 12px;
+  padding: 2px 7px;
+  flex-shrink: 0;
+  user-select: none;
+}
+
+/* Chapter Time Input / Pill */
+.chapter-time-input {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  font-weight: 700;
+  background-color: var(--bg-input);
+  color: var(--palette-purple);
+  border: 1px solid var(--palette-lilac);
+  border-radius: 6px;
+  padding: 5px 8px;
+  width: 66px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.chapter-time-input:hover {
+  background-color: var(--palette-pink);
+  border-color: var(--primary);
+}
+
+.chapter-time-input:focus {
+  background-color: #FFFFFF;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(143, 24, 163, 0.18);
+  cursor: text;
+}
+
+/* Chapter Title Input */
+.chapter-title-input {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-main);
+  font-size: 0.90rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 6px 10px;
+  transition: all 0.15s ease;
+  outline: none;
+}
+
+.chapter-title-input::placeholder {
+  color: var(--text-dim);
+  font-weight: 400;
+}
+
+.chapter-title-input:hover {
+  background-color: #FFFFFF;
+  border-color: var(--border-color);
+}
+
+.chapter-title-input:focus {
+  background-color: #FFFFFF;
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 2px rgba(143, 24, 163, 0.15);
+}
+
+/* Chapter Actions (Play & Delete) */
+.chapter-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.chapter-action-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  transition: all 0.15s ease;
+}
+
+.chapter-action-btn.play-ch-btn:hover {
+  background-color: var(--palette-pink);
+  color: var(--palette-purple);
+  border-color: var(--palette-lilac);
+}
+
+.chapter-action-btn.delete-ch-btn:hover {
+  background-color: var(--danger-bg);
+  color: var(--danger);
+  border-color: #FFCDD2;
+}
+
+/* Empty State */
+.chapters-empty-state {
+  text-align: center;
+  padding: 35px 15px;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.chapters-empty-state .empty-icon {
+  font-size: 32px;
+  margin-bottom: 2px;
+}
+
+.chapters-empty-state p {
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--text-dim);
+}
+
+/* Section B: Interactive Transcript Panel */
+.transcript-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.transcript-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.transcript-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 0.9rem;
+}
+
+.transcript-search-bar input:focus {
+  outline: none;
+}
+
+.transcript-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+}
+
+.segment-card {
+  padding: 12px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.segment-card:hover {
+  background-color: var(--bg-card-hover);
+}
+
+.segment-card.active {
+  background-color: var(--active-highlight);
+  border-color: var(--active-border);
+}
+
+.segment-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.segment-timestamp {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.segment-text {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  line-height: 1.5;
+  outline: none;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.segment-text:focus {
+  background-color: #FFFFFF;
+  box-shadow: 0 0 0 1px var(--border-focus);
+}
+
+/* Dropdown Menu (Export) */
+.dropdown-wrapper {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: calc(100% + 6px);
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 6px;
+  min-width: 180px;
+  z-index: 100;
+  box-shadow: var(--shadow-md);
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-main);
+  font-size: 0.85rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: var(--bg-card-hover);
+}
+
+/* Simple Toast Notifications */
+.toast-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 9999;
+}
+
+.toast {
+  padding: 10px 16px;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  color: var(--text-main);
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: var(--shadow-md);
+}
+
+.toast-success {
+  border-left: 4px solid var(--success);
+}
+
+.toast-danger {
+  border-left: 4px solid var(--danger);
+}
+
+/* ============================================================
+   60% MILESTONE ENHANCEMENTS: FIND/REPLACE, ACTIONS & MODALS
+   ============================================================ */
+
+/* Find & Replace Bar */
+.find-replace-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--accent-cream);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  animation: slideDown 0.15s ease;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.find-replace-bar input {
+  flex: 1;
+  background-color: #FFFFFF;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  color: var(--text-main);
+  outline: none;
+}
+
+.find-replace-bar input:focus {
+  border-color: var(--border-focus);
+}
+
+/* Segment Action Buttons */
+.segment-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.segment-action-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-dim);
+  font-size: 0.72rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.segment-action-btn:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-color);
+  color: var(--text-main);
+}
+
+.segment-action-btn.delete-btn:hover {
+  color: var(--danger);
+  border-color: var(--danger-bg);
+  background-color: var(--danger-bg);
+}
+
+/* Modal Overlay & Card */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(43, 7, 51, 0.45);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  width: 90%;
+  max-width: 540px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-md);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h3 {
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.modal-close-btn:hover {
+  color: var(--text-main);
+}
+
+.history-list-container {
+  overflow-y: auto;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.history-item:hover {
+  background-color: var(--bg-card-hover);
+  border-color: var(--border-focus);
+}
+
+.history-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history-item-name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+.history-item-meta {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.history-item-delete {
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 0.85rem;
+  border-radius: 4px;
+}
+
+.history-item-delete:hover {
+  color: var(--danger);
+  background-color: var(--danger-bg);
+}
+
+
+
+  </style>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎙️</text></svg>">
   <!-- WaveSurfer.js CDN for Audio Waveform Sync -->
   <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
@@ -168,6 +1391,519 @@
 
   </div>
 
-  <script src="/static/js/editor.js?v=chapters_revamp_v2"></script>
+  <script src="{{ url_for('static', filename='js/editor.js') }}"></script>
+  <script id="audixa-inline-editor-controller">
+  if (!window.__AUDIXA_EDITOR_INITIALIZED__) {
+    window.__AUDIXA_EDITOR_INITIALIZED__ = true;
+/**
+ * editor.js - Audio Player, Interactive Transcript, and Chapter Synchronization.
+ * Audixa - Radiant Purple & Orchid Blossom Clean Edition.
+ */
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const transcriptId = urlParams.get('id');
+
+  if (!transcriptId) {
+    window.location.href = '/';
+    return;
+  }
+
+  // DOM Elements - Header
+  const mediaFilenameEl = document.getElementById('media-filename');
+  const exportBtn = document.getElementById('export-btn');
+  const exportDropdown = document.getElementById('export-dropdown');
+
+  // Player Elements
+  const playPauseBtn = document.getElementById('play-pause-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const playbackSpeed = document.getElementById('playback-speed');
+  const volumeSlider = document.getElementById('volume-slider');
+  const muteBtn = document.getElementById('mute-btn');
+  const currentTimeDisplay = document.getElementById('current-time-display');
+  const totalDurationDisplay = document.getElementById('total-duration-display');
+  const activeTimeLabel = document.getElementById('active-time-label');
+
+  // Chapters Elements
+  const addChapterBtn = document.getElementById('add-chapter-btn');
+  const chaptersList = document.getElementById('chapters-list');
+  const manualSaveChaptersBtn = document.getElementById('manual-save-chapters-btn');
+  const chapterCountBadge = document.getElementById('chapter-count-badge');
+  const chaptersSummaryText = document.getElementById('chapters-summary-text');
+
+  // Transcript Elements
+  const manualSaveTranscriptBtn = document.getElementById('manual-save-transcript-btn');
+  const transcriptSearchInput = document.getElementById('transcript-search-input');
+  const searchMatchCount = document.getElementById('search-match-count');
+  const transcriptList = document.getElementById('transcript-list');
+  const toastContainer = document.getElementById('toast-container');
+
+  // App State
+  let transcriptData = null;
+  let segments = [];
+  let chapters = [];
+  let wavesurfer = null;
+  let isPlaying = false;
+  let isMuted = false;
+  let currentActiveSegmentId = null;
+
+  // Toast Notification Helper
+  function showToast(message, type = 'info') {
+    if (!toastContainer) return;
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    toastContainer.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+  }
+
+  // Format Seconds to MM:SS
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds === null || seconds === undefined) return '00:00';
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  // 1. Fetch Transcript and Audio Metadata from SQLite Backend
+  try {
+    const res = await fetch(`/transcript/${transcriptId}`);
+    const resJson = await res.json();
+
+    if (!resJson.success || !resJson.data) {
+      showToast('Error loading transcript from server.', 'danger');
+      return;
+    }
+
+    transcriptData = resJson.data;
+    segments = transcriptData.segments || [];
+    chapters = transcriptData.chapters || [];
+
+    // Populate Header
+    if (mediaFilenameEl) {
+      mediaFilenameEl.textContent = transcriptData.original_name || transcriptData.filename || 'Audio Recording';
+    }
+
+    initWaveSurfer(transcriptData.audio_url || `/audio/${transcriptId}`);
+    renderTranscript();
+    renderChapters();
+  } catch (err) {
+    showToast('Failed to connect to backend server.', 'danger');
+  }
+
+  // 2. Initialize WaveSurfer Audio Player
+  function initWaveSurfer(audioUrl) {
+    try {
+      wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#EE97D8',
+        progressColor: '#8F18A3',
+        cursorColor: '#751286',
+        barWidth: 2,
+        barGap: 1,
+        barRadius: 2,
+        height: 60,
+        url: audioUrl
+      });
+
+      wavesurfer.on('ready', () => {
+        const dur = wavesurfer.getDuration();
+        totalDurationDisplay.textContent = formatTime(dur);
+        activeTimeLabel.textContent = `00:00 / ${formatTime(dur)}`;
+      });
+
+      wavesurfer.on('timeupdate', (currentTime) => {
+        currentTimeDisplay.textContent = formatTime(currentTime);
+        const dur = wavesurfer.getDuration();
+        activeTimeLabel.textContent = `${formatTime(currentTime)} / ${formatTime(dur)}`;
+        highlightActiveSegment(currentTime);
+        highlightActiveChapter(currentTime);
+      });
+
+      wavesurfer.on('play', () => {
+        isPlaying = true;
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'inline';
+      });
+
+      wavesurfer.on('pause', () => {
+        isPlaying = false;
+        playIcon.style.display = 'inline';
+        pauseIcon.style.display = 'none';
+      });
+
+      wavesurfer.on('finish', () => {
+        isPlaying = false;
+        playIcon.style.display = 'inline';
+        pauseIcon.style.display = 'none';
+      });
+
+      wavesurfer.on('error', (e) => {
+        console.warn('WaveSurfer notice:', e);
+      });
+    } catch (e) {
+      console.warn('WaveSurfer initialization fallback:', e);
+    }
+  }
+
+  // Play / Pause Controls
+  playPauseBtn.addEventListener('click', () => {
+    if (wavesurfer) wavesurfer.playPause();
+  });
+
+  playbackSpeed.addEventListener('change', (e) => {
+    if (wavesurfer) wavesurfer.setPlaybackRate(parseFloat(e.target.value));
+  });
+
+  volumeSlider.addEventListener('input', (e) => {
+    const val = parseFloat(e.target.value);
+    if (wavesurfer) wavesurfer.setVolume(val);
+    isMuted = (val === 0);
+    muteBtn.textContent = isMuted ? '🔇' : '🔊';
+  });
+
+  if (muteBtn) {
+    muteBtn.addEventListener('click', () => {
+      if (!wavesurfer) return;
+      if (isMuted) {
+        wavesurfer.setVolume(1.0);
+        volumeSlider.value = 1.0;
+        muteBtn.textContent = '🔊';
+        isMuted = false;
+      } else {
+        wavesurfer.setVolume(0.0);
+        volumeSlider.value = 0.0;
+        muteBtn.textContent = '🔇';
+        isMuted = true;
+      }
+    });
+  }
+
+  // 3. Render Interactive Transcript
+  function renderTranscript() {
+    transcriptList.innerHTML = '';
+
+    if (segments.length === 0) {
+      transcriptList.innerHTML = '<div style="color:var(--text-dim); text-align:center; padding:30px;">No speech detected in audio.</div>';
+      return;
+    }
+
+    segments.forEach((seg) => {
+      const card = document.createElement('div');
+      card.className = 'segment-card';
+      card.id = `segment-card-${seg.id}`;
+
+      card.innerHTML = `
+        <div class="segment-header">
+          <span class="segment-timestamp" title="Click to seek audio">⏱️ ${formatTime(seg.start_time)} - ${formatTime(seg.end_time)}</span>
+          <div class="segment-header-actions">
+            <button type="button" class="segment-action-btn delete-btn" title="Delete segment" data-id="${seg.id}">🗑️</button>
+          </div>
+        </div>
+        <div class="segment-text" contenteditable="true" spellcheck="false" data-id="${seg.id}">
+          ${escapeHtml(seg.text)}
+        </div>
+      `;
+
+      // Click timestamp to seek audio
+      const timeStampEl = card.querySelector('.segment-timestamp');
+      if (timeStampEl) {
+        timeStampEl.addEventListener('click', () => {
+          if (wavesurfer) wavesurfer.setTime(seg.start_time);
+        });
+      }
+
+      // Inline text editing
+      const textDiv = card.querySelector('.segment-text');
+      if (textDiv) {
+        textDiv.addEventListener('input', (e) => {
+          seg.text = e.target.innerText;
+        });
+      }
+
+      // Delete action
+      const deleteBtn = card.querySelector('.delete-btn');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          handleDeleteSegment(seg.id);
+        });
+      }
+
+      transcriptList.appendChild(card);
+    });
+  }
+
+  // Segment Delete Handler
+  function handleDeleteSegment(segId) {
+    segments = segments.filter(s => s.id !== segId);
+    renderTranscript();
+    showToast('Segment deleted.', 'info');
+  }
+
+  // Highlight Segment during Playback & Auto-scroll
+  function highlightActiveSegment(currentTime) {
+    const activeSeg = segments.find(s => currentTime >= s.start_time && currentTime <= s.end_time);
+
+    if (activeSeg && activeSeg.id !== currentActiveSegmentId) {
+      if (currentActiveSegmentId) {
+        const prevCard = document.getElementById(`segment-card-${currentActiveSegmentId}`);
+        if (prevCard) prevCard.classList.remove('active');
+      }
+
+      currentActiveSegmentId = activeSeg.id;
+      const curCard = document.getElementById(`segment-card-${currentActiveSegmentId}`);
+      if (curCard) {
+        curCard.classList.add('active');
+        curCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  }
+
+  // 4. Render Chapters Panel
+  function renderChapters() {
+    chaptersList.innerHTML = '';
+
+    if (chapterCountBadge) {
+      chapterCountBadge.textContent = `${chapters.length} chapter${chapters.length === 1 ? '' : 's'}`;
+    }
+    if (chaptersSummaryText) {
+      chaptersSummaryText.textContent = `${chapters.length} timestamp marker${chapters.length === 1 ? '' : 's'}`;
+    }
+
+    if (chapters.length === 0) {
+      chaptersList.innerHTML = `
+        <div class="chapters-empty-state">
+          <span class="empty-icon">📑</span>
+          <p>No chapters yet.<br>Click <strong>+ Add Chapter</strong> to create timestamped markers.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Sort chapters by start_time
+    chapters.sort((a, b) => a.start_time - b.start_time);
+
+    chapters.forEach((ch, idx) => {
+      const chCard = document.createElement('div');
+      chCard.className = 'chapter-card';
+      chCard.id = `chapter-card-${idx}`;
+
+      chCard.innerHTML = `
+        <span class="chapter-idx-badge">${String(idx + 1).padStart(2, '0')}</span>
+        <input type="text" class="chapter-time-input" value="${formatTime(ch.start_time)}" title="Click to seek audio, or edit time (MM:SS)" data-idx="${idx}">
+        <input type="text" class="chapter-title-input" value="${escapeHtml(ch.title)}" placeholder="Enter chapter title..." title="Edit chapter title" data-idx="${idx}">
+        <div class="chapter-actions">
+          <button type="button" class="chapter-action-btn play-ch-btn" title="Play from this chapter" data-time="${ch.start_time}">▶</button>
+          <button type="button" class="chapter-action-btn delete-ch-btn" title="Delete chapter" data-idx="${idx}">✕</button>
+        </div>
+      `;
+
+      // Click time input to seek & play
+      const timeInput = chCard.querySelector('.chapter-time-input');
+      timeInput.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (wavesurfer) {
+          wavesurfer.setTime(ch.start_time);
+          if (!isPlaying) wavesurfer.play();
+        }
+      });
+
+      timeInput.addEventListener('change', (e) => {
+        const parts = e.target.value.split(':');
+        if (parts.length === 2) {
+          const m = parseInt(parts[0], 10) || 0;
+          const s = parseInt(parts[1], 10) || 0;
+          ch.start_time = Math.max(0, m * 60 + s);
+          renderChapters();
+          showToast(`Updated timestamp to ${formatTime(ch.start_time)}`, 'info');
+        } else {
+          e.target.value = formatTime(ch.start_time);
+        }
+      });
+
+      // Edit title
+      const titleInput = chCard.querySelector('.chapter-title-input');
+      titleInput.addEventListener('input', (e) => {
+        ch.title = e.target.value;
+      });
+
+      // Play button
+      const playBtn = chCard.querySelector('.play-ch-btn');
+      playBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (wavesurfer) {
+          wavesurfer.setTime(ch.start_time);
+          wavesurfer.play();
+          showToast(`Playing: ${ch.title}`, 'info');
+        }
+      });
+
+      // Delete chapter
+      const deleteChBtn = chCard.querySelector('.delete-ch-btn');
+      deleteChBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        chapters.splice(idx, 1);
+        renderChapters();
+        showToast('Chapter removed.', 'info');
+      });
+
+      chaptersList.appendChild(chCard);
+    });
+  }
+
+  // Highlight active chapter
+  function highlightActiveChapter(currentTime) {
+    if (chapters.length === 0) return;
+    let activeIdx = -1;
+    for (let i = 0; i < chapters.length; i++) {
+      if (currentTime >= chapters[i].start_time) {
+        activeIdx = i;
+      }
+    }
+    document.querySelectorAll('.chapter-card').forEach((el, idx) => {
+      el.classList.toggle('active', idx === activeIdx);
+    });
+  }
+
+  // Add Chapter Button
+  addChapterBtn.addEventListener('click', () => {
+    const curTime = wavesurfer ? Math.floor(wavesurfer.getCurrentTime()) : 0;
+    const newCh = {
+      title: `Chapter ${chapters.length + 1}`,
+      start_time: curTime,
+      end_time: curTime + 60
+    };
+    chapters.push(newCh);
+    renderChapters();
+    showToast(`Added chapter at ${formatTime(curTime)}`, 'success');
+  });
+
+  // 5. Save Actions (Backend API Persistence)
+  async function performSaveTranscript() {
+    try {
+      const payload = {
+        segments: segments.map(s => ({
+          id: s.id,
+          start_time: s.start_time,
+          end_time: s.end_time,
+          text: s.text
+        }))
+      };
+
+      const res = await fetch(`/save_transcript/${transcriptId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Transcript saved successfully!', 'success');
+      } else {
+        showToast(data.error || 'Failed to save transcript.', 'danger');
+      }
+    } catch (e) {
+      showToast('Error connecting to backend server.', 'danger');
+    }
+  }
+
+  async function performSaveChapters() {
+    try {
+      const payload = {
+        chapters: chapters.map(ch => ({
+          title: ch.title,
+          start_time: ch.start_time,
+          end_time: ch.end_time
+        }))
+      };
+
+      const res = await fetch(`/save_chapters/${transcriptId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (data.success) {
+        showToast('Chapters saved successfully!', 'success');
+      } else {
+        showToast(data.error || 'Failed to save chapters.', 'danger');
+      }
+    } catch (e) {
+      showToast('Error connecting to backend server.', 'danger');
+    }
+  }
+
+  manualSaveTranscriptBtn.addEventListener('click', performSaveTranscript);
+  manualSaveChaptersBtn.addEventListener('click', performSaveChapters);
+
+  // 6. Search Filter in Transcript
+  if (transcriptSearchInput) {
+    transcriptSearchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      let matches = 0;
+
+      document.querySelectorAll('.segment-card').forEach(card => {
+        const textEl = card.querySelector('.segment-text');
+        const text = textEl ? textEl.innerText.toLowerCase() : '';
+
+        if (!query || text.includes(query)) {
+          card.style.display = 'block';
+          if (query && text.includes(query)) matches++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      if (searchMatchCount) searchMatchCount.textContent = query ? `${matches} matches` : '';
+    });
+  }
+
+  // 7. Multi-format Export Handlers (Direct API Downloads including PDF)
+  if (exportBtn) {
+    exportBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      exportDropdown.classList.toggle('show');
+    });
+
+    document.addEventListener('click', () => {
+      exportDropdown.classList.remove('show');
+    });
+
+    document.querySelectorAll('.dropdown-item').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const type = e.target.getAttribute('data-export');
+        window.location.href = `/api/export/${transcriptId}/${type}`;
+        showToast(`Generating .${type} download...`, 'success');
+      });
+    });
+  }
+
+  // 8. Shortcuts: Space to Play/Pause, Ctrl+S to Save
+  document.addEventListener('keydown', (e) => {
+    const isEditing = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable;
+
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+      e.preventDefault();
+      performSaveTranscript();
+      performSaveChapters();
+      return;
+    }
+
+    if (!isEditing && e.code === 'Space') {
+      e.preventDefault();
+      if (wavesurfer) wavesurfer.playPause();
+    }
+  });
+
+  // Utility Helpers
+  function escapeHtml(text) {
+    if (!text) return '';
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+});
+
+  }
+  </script>
 </body>
 </html>

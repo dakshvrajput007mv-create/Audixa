@@ -33,6 +33,8 @@ else:
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 db.init_db()
 
+BACKEND_URL = os.environ.get("BACKEND_URL", "http://localhost:8000")
+
 ALLOWED_EXTENSIONS = {"mp3", "wav", "m4a", "mp4", "ogg", "flac", "webm", "aac", "wma"}
 
 
@@ -53,6 +55,13 @@ def editor():
     """Page 2: Editor Page."""
     transcript_id = request.args.get("id", "").strip()
     return render_template("editor.html", transcript_id=transcript_id)
+
+
+@app.route("/static/<path:filename>")
+def serve_static(filename):
+    """Guaranteed static file serving across all cloud and local environments."""
+    static_dir = os.path.join(app.root_path, "static")
+    return send_from_directory(static_dir, filename)
 
 
 @app.route("/plan.pdf")
